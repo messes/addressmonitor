@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wallet-watch"
+version = "0.1.0"
+description = "Self-hosted blockchain wallet monitoring with instant notifications"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Wallet Watch Contributors" }
+]
+keywords = ["blockchain", "solana", "ethereum", "wallet", "monitoring", "telegram", "notifications"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "pytelegrambotapi>=4.14.0",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0",
+    "base58>=2.1.0",
+    "pydantic>=2.0.0",
+    "click>=8.1.0",
+    "flask>=3.0.0",
+]
+
+[project.optional-dependencies]
+postgres = [
+    "psycopg2-binary>=2.9.9",
+]
+discord = [
+    "discord.py>=2.3.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+all = [
+    "wallet-watch[postgres,discord,dev]",
+]
+
+[project.scripts]
+wallet-watch = "wallet_watch.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/wallet-watch"
+Documentation = "https://github.com/yourusername/wallet-watch#readme"
+Repository = "https://github.com/yourusername/wallet-watch"
+Issues = "https://github.com/yourusername/wallet-watch/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wallet_watch"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"

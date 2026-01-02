@@ -1,0 +1,94 @@
+# Wallet Watch Configuration
+# Copy this file to config.yaml and customize
+
+# ============================================
+# BLOCKCHAIN PROVIDERS
+# ============================================
+# Configure which blockchains to monitor
+
+chains:
+  # Solana via Helius (https://helius.dev)
+  - name: solana
+    provider: helius
+    api_key: ${HELIUS_API_KEY}
+    webhook_id: ${HELIUS_WEBHOOK_ID}
+    webhook_url: ${WEBHOOK_URL}
+    webhook_secret: ${WEBHOOK_SECRET}
+
+  # Ethereum via Alchemy (coming soon)
+  # - name: ethereum
+  #   provider: alchemy
+  #   api_key: ${ALCHEMY_API_KEY}
+
+# ============================================
+# NOTIFICATION PROVIDERS
+# ============================================
+# Configure where to send notifications
+
+notifiers:
+  # Telegram Bot
+  - type: telegram
+    bot_token: ${TELEGRAM_BOT_TOKEN}
+    chat_id: ${TELEGRAM_CHAT_ID}
+
+  # Generic Webhook (e.g., Discord, Slack, custom)
+  # - type: webhook
+  #   webhook_url: ${DISCORD_WEBHOOK_URL}
+
+# ============================================
+# WALLET WATCHES
+# ============================================
+# List of wallets to monitor
+
+watches:
+  # Add wallets to track (via WATCH_ADDRESS env var or edit this file)
+  - address: ${WATCH_ADDRESS}
+    chain: solana
+    label: ${WATCH_LABEL:-My Wallet}
+    notify: [telegram]
+
+  # Example: Track with custom filters
+  # - address: "AnotherWalletAddress"
+  #   chain: solana
+  #   label: "Trading Wallet"
+  #   notify: [telegram, webhook]
+  #   filters:
+  #     min_usd_value: 100
+  #     tx_types: [swap]
+
+# ============================================
+# GLOBAL FILTERS
+# ============================================
+# Apply to all watches (can be overridden per-watch)
+
+filters:
+  # Minimum USD value to trigger notification (0 = all)
+  min_usd_value: 0
+
+  # Transaction types to monitor (empty = all)
+  # Options: swap, transfer, nft_sale, nft_mint, etc.
+  tx_types: []
+
+# ============================================
+# STORAGE
+# ============================================
+# Where to store watches and transaction history
+
+storage:
+  # SQLite (default, no setup required)
+  type: sqlite
+  path: ./data/wallet_watch.db
+
+  # PostgreSQL (optional, for production)
+  # type: postgres
+  # url: ${DATABASE_URL}
+
+# ============================================
+# WEBHOOK SERVER
+# ============================================
+# Settings for receiving provider webhooks
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  # secret: ${WEBHOOK_SECRET}  # For webhook authentication

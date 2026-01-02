@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  wallet-watch:
+    build: .
+    container_name: wallet-watch
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - wallet-watch-data:/app/data
+    ports:
+      - "8080:8080"  # Webhook receiver port
+    healthcheck:
+      test: ["CMD", "wallet-watch", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: PostgreSQL database
+  # Uncomment if you want persistent storage with PostgreSQL
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: wallet-watch-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: walletwatch
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-walletwatch}
+  #     POSTGRES_DB: walletwatch
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+volumes:
+  wallet-watch-data:
+  # postgres-data:
